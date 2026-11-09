@@ -64,7 +64,7 @@ TopBar.Parent = Main
 Instance.new("UICorner", TopBar).CornerRadius = UDim.new(0, 8)
 
 local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(0, 150, 1, 0) -- Verkleinert, um Überlappung zu vermeiden
+Title.Size = UDim2.new(0, 150, 1, 0)
 Title.Position = UDim2.new(0, 15, 0, 0)
 Title.BackgroundTransparency = 1
 Title.Text = "MTRN Projects V1"
@@ -84,7 +84,6 @@ local FpsLabel, PingLabel, PlayersLabel
 local MinimizeBtn, CloseBtn
 do
     local InfoFrame = Instance.new("Frame")
-    -- Fix: Nach rechts verschoben und AutoSize aktiviert, damit es nicht mit dem Titel überlappt
     InfoFrame.Size = UDim2.new(0, 0, 1, 0)
     InfoFrame.AutomaticSize = Enum.AutomaticSize.X
     InfoFrame.AnchorPoint = Vector2.new(1, 0)
@@ -292,7 +291,6 @@ do
     MTRN.tabButtons = tabButtons
     MTRN.selectTab = selectTab
 
-    -- NEUER UTILITY TAB HINZUGEFÜGT
     local TAB_LIST = { "Info", "Player", "ESP", "Combat", "Fling", "Visuals", "Utility", "More Scripts" }
     local BUILT_TABS = { Info = true, Player = true, ESP = true, Combat = true, Fling = true, Visuals = true, Utility = true, ["More Scripts"] = true }
 
@@ -1921,11 +1919,11 @@ do
     -- UI Building for Aimbot mit Collapsible Section (Standardmäßig zugeklappt!)
     local aimbotSection = createCollapsibleSection(combatScroll, "Aimbot", false)
 
+    -- HIER WURDE DER KEYBIND ENTFERNT:
     createFeature(aimbotSection, {
         Label = "Aimbot",
-        Keybind = { Default = Enum.KeyCode.None },
         Toggle = true,
-        ToggleDefault = false, -- Aimbot standardmäßig aus
+        ToggleDefault = false,
         OnToggle = function(on) aimbotConfig.Enabled = on end,
     }).Frame.LayoutOrder = 1
 
@@ -2012,8 +2010,8 @@ do
 
     createFeature(aimbotSection, {
         Label = "Show FOV Circle",
-        Toggle = true,       -- WICHTIG: Auf true, sonst wird der Button nicht gerendert!
-        ToggleDefault = false, -- WICHTIG: Startet ausgeschaltet
+        Toggle = true,
+        ToggleDefault = false,
         OnToggle = function(on) 
             aimbotConfig.ShowFOV = on 
             if aimbotFOVCircle then aimbotFOVCircle.Visible = on end
@@ -2027,7 +2025,7 @@ do
             currentColorIndex = currentColorIndex % #COLOR_PRESETS + 1
             local preset = COLOR_PRESETS[currentColorIndex]
             aimbotConfig.FOVColor = preset[2]
-            btn.Text = preset[1] -- Fix: Button Text wird jetzt aktualisiert
+            btn.Text = preset[1]
             if aimbotFOVCircle then aimbotFOVCircle.Color = preset[2] end
         end
     })
@@ -2036,14 +2034,14 @@ do
     createFeature(aimbotSection, {
         Label = "Wall Check",
         Toggle = true,
-        ToggleDefault = true, -- Standardmäßig an
+        ToggleDefault = true,
         OnToggle = function(on) aimbotConfig.WallCheck = on end,
     }).Frame.LayoutOrder = 8
 
     createFeature(aimbotSection, {
         Label = "Team Check",
         Toggle = true,
-        ToggleDefault = true, -- Standardmäßig an
+        ToggleDefault = true,
         OnToggle = function(on) aimbotConfig.TeamCheck = on end,
     }).Frame.LayoutOrder = 9
 
@@ -3251,7 +3249,7 @@ do
 end
 
 -- ═══════════════════════════════════════════════════════════
--- 🧰 UTILITY TAB (Neu & Leer)
+-- 🧰 UTILITY TAB
 -- ═══════════════════════════════════════════════════════════
 do
     local utilityContainer = MTRN.pages["Utility"].container
