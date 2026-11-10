@@ -471,7 +471,8 @@ local capturingField = nil
 
 UserInputService.InputBegan:Connect(function(input, gpe)
     if gpe then return end
-    if input.UserInputType ~= Enum.UserInputType.Keyboard then return end
+    -- CONTROLLER SUPPORT: Erlaubt Keyboard & Gamepad
+    if input.UserInputType ~= Enum.UserInputType.Keyboard and not input.UserInputType.Name:find("Gamepad") then return end
     if capturingField then return end
     for _, entry in ipairs(keybindRegistry) do
         if entry.key == input.KeyCode and entry.enabled then
@@ -511,7 +512,8 @@ local function createKeybind(parent, defaultKey, callback)
 
     UserInputService.InputBegan:Connect(function(input, gpe)
         if not isCapturing() then return end
-        if input.UserInputType ~= Enum.UserInputType.Keyboard then return end
+        -- CONTROLLER SUPPORT
+        if input.UserInputType ~= Enum.UserInputType.Keyboard and not input.UserInputType.Name:find("Gamepad") then return end
         if input.KeyCode == Enum.KeyCode.Escape then
             capturingField = nil
             btn.Text = entry.key and entry.key.Name or "None"
@@ -1847,7 +1849,7 @@ do
         aimbotFOVCircle.Visible = false
     end
 
-    -- Custom Keybind Button (unterstützt Maus + Tastatur)
+    -- Custom Keybind Button (unterstützt Maus + Tastatur + Controller)
     local function createAimbotKeybind(parent, defaultBind, callback)
         local btn = Instance.new("TextButton")
         btn.Size = UDim2.new(0, 70, 0, 22)
@@ -1887,7 +1889,8 @@ do
 
         UserInputService.InputBegan:Connect(function(input, gpe)
             if not isCapturing() then return end
-            if gpe and input.UserInputType == Enum.UserInputType.Keyboard then return end
+            -- CONTROLLER SUPPORT
+            if gpe and (input.UserInputType == Enum.UserInputType.Keyboard or input.UserInputType.Name:find("Gamepad")) then return end
             
             if input.KeyCode == Enum.KeyCode.Escape then
                 listeningForKey = nil
@@ -1901,7 +1904,7 @@ do
                 or input.UserInputType == Enum.UserInputType.MouseButton2
                 or input.UserInputType == Enum.UserInputType.MouseButton3 then
                 newBind = input.UserInputType
-            elseif input.UserInputType == Enum.UserInputType.Keyboard then
+            elseif input.UserInputType == Enum.UserInputType.Keyboard or input.UserInputType.Name:find("Gamepad") then
                 newBind = input.KeyCode
             end
 
@@ -2055,7 +2058,7 @@ do
     })
     boneCycle.Frame.LayoutOrder = 10
 
-    -- Aimbot Input Logic
+    -- Aimbot Input Logic (Unterstützt jetzt auch Gamepad da der Keybind ein Enum.KeyCode sein kann)
     UserInputService.InputBegan:Connect(function(input, gpe)
         if listeningForKey then return end
         if input.UserInputType == aimbotConfig.Keybind or input.KeyCode == aimbotConfig.Keybind then
@@ -3274,7 +3277,6 @@ do
     utilityScrollPadding.PaddingBottom = UDim.new(0, 8)
     utilityScrollPadding.Parent = utilityScroll
 
-    -- Platzhalter für zukünftige Features
     local placeholder = Instance.new("TextLabel")
     placeholder.Size = UDim2.new(1, 0, 0, 20)
     placeholder.BackgroundTransparency = 1
